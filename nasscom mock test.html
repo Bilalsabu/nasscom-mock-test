@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASSCOM AI Literacy — Mock Test</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+  :root{
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --line: #cbd5e1;
+    --line-light: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-light: #f5f3ff;
+    --accent-2: #0ea5e9;
+    --danger: #e11d48;
+    --danger-light: #fff1f2;
+    --warn: #d97706;
+    --warn-light: #fef3c7;
+    --success: #10b981;
+    --success-light: #ecfdf5;
+    --radius: 8px;
+    --serif: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:40px 16px 80px;}
+
+  /* HEADER */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 0 20px;border-bottom:1px solid var(--line-light);margin-bottom:30px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .mark{
+    width:30px;height:30px;border-radius:6px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-weight:700;color:#ffffff;font-size:14px;
+  }
+  .brand .name{font-family:var(--serif);font-size:18px;letter-spacing:.1px;font-weight:500;}
+  .brand .name b{font-weight:700;color:var(--accent);}
+  .pill{
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--line-light);padding:4px 10px;border-radius:999px;
+    background:var(--panel-2);font-weight:500;
+  }
+
+  /* SCREENS */
+  .screen{display:none;}
+  .screen.active{display:block;animation:fadein .3s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  /* SETUP SCREEN */
+  .hero-title{
+    font-family:var(--serif);font-size:36px;line-height:1.15;margin:6px 0 10px;
+    font-weight:700;letter-spacing:-0.5px;
+  }
+  .hero-sub{color:var(--muted);font-size:15.5px;line-height:1.6;margin:0 0 30px;max-width:560px;}
+  .stat-row{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap;}
+  .stat{
+    flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line-light);
+    border-radius:var(--radius);padding:16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+  .stat .n{font-family:var(--mono);font-size:24px;color:var(--accent);font-weight:700;}
+  .stat .l{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.8px;font-weight:600;}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line-light);border-radius:var(--radius);
+    padding:24px;margin-bottom:20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .card h3{margin:0 0 16px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:700;}
+
+  .module-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .module-chip{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 14px;border-radius:var(--radius);border:1px solid var(--line-light);
+    background:var(--bg);cursor:pointer;font-size:13px;user-select:none;
+    transition:all .15s ease-in-out;
+  }
+  .module-chip:hover{border-color:var(--line);background:var(--panel);}
+  .module-chip.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:500;}
+  .module-chip .cnt{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--panel-2);padding:1px 5px;border-radius:4px;}
+  .module-chip.active .cnt{color:var(--accent);background:rgba(79, 70, 229, 0.12);}
+
+  .opt-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .opt-btn{
+    flex:1;min-width:120px;padding:16px;border-radius:var(--radius);border:1px solid var(--line-light);
+    background:var(--bg);color:var(--text);font-size:14px;cursor:pointer;text-align:left;
+    font-family:var(--sans);transition:all .15s ease-in-out;
+  }
+  .opt-btn:hover{border-color:var(--line);background:var(--panel);}
+  .opt-btn.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:500;}
+
+  .count-input{
+    width:100%;padding:12px 14px;border-radius:var(--radius);border:1px solid var(--line-light);
+    background:var(--bg);color:var(--text);font-size:15px;font-family:var(--mono);
+    transition:all .15s ease;
+  }
+  .count-input:focus{outline:none;border-color:var(--accent);background:var(--panel);box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:8px;}
+
+  .btn-primary{
+    width:100%;padding:16px;border-radius:var(--radius);border:none;
+    background:var(--accent);color:#ffffff;font-weight:600;font-size:15.5px;cursor:pointer;
+    font-family:var(--sans);letter-spacing:.2px;
+    box-shadow:0 4px 14px rgba(79,70,229,0.15);
+    transition:all .15s ease-in-out;
+  }
+  .btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,70,229,0.22);}
+  .btn-primary:active{transform:translateY(0);}
+  .btn-secondary{
+    width:100%;padding:14px;border-radius:var(--radius);border:1px solid var(--line-light);
+    background:var(--panel);color:var(--text);font-size:14px;cursor:pointer;
+    font-family:var(--sans);margin-top:10px;font-weight:500;
+    transition:all .15s;
+  }
+  .btn-secondary:hover{background:var(--bg);border-color:var(--line);}
+
+  /* QUIZ SCREEN */
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .qnum{font-family:var(--mono);font-size:13px;color:var(--muted);}
+  .qnum b{color:var(--text);font-weight:600;}
+  .timer{font-family:var(--mono);font-size:13px;color:var(--warn);font-weight:600;}
+  .progress-track{height:6px;background:var(--panel-2);border-radius:999px;overflow:hidden;margin-bottom:24px;}
+  .progress-fill{height:100%;background:var(--accent);transition:width .3s;}
+
+  .module-tag{
+    display:inline-block;font-family:var(--mono);font-size:11px;color:var(--accent);
+    border:1px solid rgba(79,70,229,0.25);background:var(--accent-light);
+    padding:4px 10px;border-radius:6px;margin-bottom:16px;font-weight:600;
+  }
+  .qtext{font-family:var(--serif);font-size:22px;line-height:1.45;margin:0 0 24px;font-weight:600;}
+  .multi-hint{font-size:12.5px;color:var(--accent-2);margin:-18px 0 18px;font-style:italic;}
+
+  .options{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+  .option{
+    display:flex;align-items:flex-start;gap:12px;padding:15px 18px;border-radius:var(--radius);
+    border:1px solid var(--line-light);background:var(--panel);cursor:pointer;
+    transition:all .15s ease-in-out;
+  }
+  .option:hover{border-color:var(--line);background:var(--bg);}
+  .option.picked{border-color:var(--accent);background:var(--accent-light);}
+  .option .letter{
+    font-family:var(--mono);font-size:12px;color:var(--muted);min-width:22px;
+    width:22px;height:22px;border-radius:4px;border:1px solid var(--line-light);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+    background:var(--bg);font-weight:600;
+  }
+  .option.picked .letter{border-color:var(--accent);color:var(--accent);background:var(--panel);}
+  .option .otext{font-size:14.5px;line-height:1.5;color:var(--text);}
+
+  .nav-row{display:flex;gap:10px;}
+  .nav-btn{
+    flex:1;padding:14px;border-radius:var(--radius);border:1px solid var(--line-light);
+    background:var(--panel);color:var(--text);font-size:14.5px;cursor:pointer;
+    font-family:var(--sans);font-weight:600;transition:all .15s;
+  }
+  .nav-btn:hover:not(:disabled){background:var(--bg);border-color:var(--line);}
+  .nav-btn.next{background:var(--accent);color:#ffffff;border:none;}
+  .nav-btn.next:hover{background:var(--accent-hover);}
+  .nav-btn:disabled{opacity:.35;cursor:default;}
+
+  .flag-btn{
+    background:var(--panel);border:1px solid var(--line-light);color:var(--muted);
+    font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:var(--mono);
+    transition:all .15s;
+  }
+  .flag-btn:hover{background:var(--bg);border-color:var(--line);}
+  .flag-btn.flagged{border-color:var(--warn);color:var(--warn);background:var(--warn-light);}
+
+  /* jump grid (review) */
+  .jumpgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:16px 0 22px;}
+  .jcell{
+    aspect-ratio:1;border-radius:6px;border:1px solid var(--line-light);background:var(--bg);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;
+    cursor:pointer;color:var(--muted);transition:all .15s;
+  }
+  .jcell:hover{background:var(--panel-2);border-color:var(--line);}
+  .jcell.answered{border-color:var(--success);color:var(--success);background:var(--success-light);font-weight:600;}
+  .jcell.flagged{border-color:var(--warn);color:var(--warn);background:var(--warn-light);}
+  .jcell.current{outline:2px solid var(--accent);outline-offset:1px;}
+
+  /* RESULTS SCREEN */
+  .score-hero{text-align:center;padding:35px 0 15px;}
+  .score-big{font-family:var(--serif);font-size:72px;font-weight:700;line-height:1;color:var(--accent);}
+  .score-big span{font-size:32px;color:var(--muted);font-weight:400;}
+  .score-label{color:var(--muted);font-size:15px;margin-top:8px;font-weight:500;}
+  .grade-band{
+    display:inline-block;margin-top:16px;padding:6px 16px;border-radius:999px;
+    font-family:var(--mono);font-size:12px;font-weight:600;
+  }
+
+  .breakdown-row{
+    display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line-light);
+  }
+  .breakdown-row:last-child{border-bottom:none;}
+  .breakdown-row .bm{font-size:13.5px;flex:1.8;font-weight:500;}
+  .breakdown-bar{flex:3;height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden;}
+  .breakdown-fill{height:100%;border-radius:4px;}
+  .breakdown-row .bn{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right;}
+
+  .review-item{
+    border:1px solid var(--line-light);border-radius:var(--radius);padding:16px;margin-bottom:12px;background:var(--panel);
+  }
+  .review-item.correct{border-left:4px solid var(--success);}
+  .review-item.wrong{border-left:4px solid var(--danger);}
+  .review-item.skipped{border-left:4px solid var(--muted);}
+  .ri-q{font-size:14.5px;margin:0 0 12px;font-weight:500;line-height:1.5;}
+  .ri-line{font-size:13px;margin:6px 0;padding:8px 12px;border-radius:6px;font-weight:500;}
+  .ri-line.your{color:var(--danger);background:var(--danger-light);}
+  .ri-line.correct-line{color:var(--success);background:var(--success-light);}
+  .filter-row{display:flex;gap:8px;margin-bottom:20px;}
+  .filter-chip{
+    padding:6px 14px;border-radius:999px;border:1px solid var(--line-light);background:var(--panel-2);
+    font-size:12px;color:var(--muted);cursor:pointer;font-weight:500;transition:all .15s;
+  }
+  .filter-chip:hover{background:var(--line-light);color:var(--text);}
+  .filter-chip.active{border-color:var(--accent);color:#ffffff;background:var(--accent);}
+
+  ::selection{background:rgba(79, 70, 229, 0.15);}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">N</div>
+      <div class="name">NASSCOM <b>AI Literacy</b></div>
+    </div>
+    <div class="pill" id="headerPill">MOCK TEST</div>
+  </div>
+
+  <!-- SETUP SCREEN -->
+  <div class="screen active" id="screen-setup">
+    <h1 class="hero-title">Build your mock test</h1>
+    <p class="hero-sub">308 questions pulled from all 10 NASSCOM model question PDFs. Pick the modules and question count, then go.</p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">308</div><div class="l">Total Qs</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Modules</div></div>
+      <div class="stat"><div class="n" id="selectedCount">308</div><div class="l">Selected</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Modules</h3>
+      <div class="module-grid" id="moduleGrid"></div>
+    </div>
+
+    <div class="card">
+      <h3>How many questions?</h3>
+      <input type="number" class="count-input" id="qCountInput" min="5" max="308" value="50">
+      <p class="hint">Leave at max to include every available question in your selected modules.</p>
+    </div>
+
+    <div class="card">
+      <h3>Mode</h3>
+      <div class="opt-row">
+        <button class="opt-btn selected" data-mode="exam" id="modeExam">Exam mode<br><span style="color:var(--muted);font-size:11px;">Answers shown at the end</span></button>
+        <button class="opt-btn" data-mode="practice" id="modePractice">Practice mode<br><span style="color:var(--muted);font-size:11px;">Instant feedback per question</span></button>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="startBtn">Start mock test →</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="screen-quiz">
+    <div class="quiz-head">
+      <div class="qnum">Question <b id="qPos">1</b> / <span id="qTotal">50</span></div>
+      <button class="flag-btn" id="flagBtn">⚑ Flag</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:2%"></div></div>
+
+    <div class="module-tag" id="moduleTag">MODULE 1</div>
+    <div class="qtext" id="qText">Question text here</div>
+    <div class="multi-hint" id="multiHint" style="display:none;">Select all that apply</div>
+
+    <div class="options" id="optionsList"></div>
+
+    <div id="practiceFeedback" style="display:none;margin-bottom:20px;"></div>
+
+    <div class="nav-row">
+      <button class="nav-btn" id="prevBtn">← Back</button>
+      <button class="nav-btn next" id="nextBtn">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="screen" id="screen-results">
+    <div class="score-hero">
+      <div class="score-big" id="scoreBig">0<span>/0</span></div>
+      <div class="score-label" id="scoreLabel">questions correct</div>
+      <div class="grade-band" id="gradeBand">—</div>
+    </div>
+
+    <div class="card">
+      <h3>Score by module</h3>
+      <div id="moduleBreakdown"></div>
+    </div>
+
+    <div class="card">
+      <h3>Review answers</h3>
+      <div class="filter-row">
+        <div class="filter-chip active" data-filter="all">All</div>
+        <div class="filter-chip" data-filter="wrong">Wrong</div>
+        <div class="filter-chip" data-filter="skipped">Skipped</div>
+        <div class="filter-chip" data-filter="flagged">Flagged</div>
+      </div>
+      <div id="reviewList"></div>
+    </div>
+
+    <button class="btn-primary" id="retryBtn">Take another mock test</button>
+    <button class="btn-secondary" id="retryWrongBtn">Retry only the wrong ones</button>
+  </div>
+
+</div>
+
+<script id="question-data" type="application/json">
+[{"m":1,"q":"Identify the chatbot developed by OpenAI:","opts":["Gemini","ChatGPT","Bing AI","Claude"],"ans":[1]},{"m":1,"q":"What role do data science engineers play in the synergy between AI and data science engineering?","opts":["Handling electronic health records in healthcare","Optimizing investment portfolios in finance","Evaluating AI models using statistical methods","Developing AI algorithms and models"],"ans":[3]},{"m":1,"q":"Arrange in order of occurrence: 1) Term 'AI' coined by McCarthy 2) Deep Blue defeats Kasparov 3) First neural network model","opts":["1 > 3 > 2","3 > 2 > 1","2 > 3 > 1","2 > 1 > 3"],"ans":[0]},{"m":1,"q":"Match: 1. Machine Learning 2. Neural Networks 3. NLP with A) learns & predicts from data B) brain-inspired pattern recognition C) mimics cognitive functions","opts":["1-C, 2-B, 3-A","1-A, 2-B, 3-C","1-C, 2-A, 3-B","1-A, 2-C, 3-B"],"ans":[1]},{"m":1,"q":"A healthcare startup uses neural networks for rare-disease diagnosis. Which aspect is crucial for accuracy?","opts":["Loss functions","Activation functions","Gradient descent optimization","Regularization techniques"],"ans":[1]},{"m":1,"q":"How can understanding business processes in a domain help optimize operations?","opts":["Enhancing decision-making","Strengthening manual errors","Enhancing fictional scenarios","Promoting irrelevant details"],"ans":[0]},{"m":1,"q":"A company wants an AI model to improve sales forecasting. What must be enhanced?","opts":["6-month forecast","Dashboard reports","Sales","Model & report"],"ans":[3]},{"m":1,"q":"Order the steps to improve customer service using AI: 1) Implement AI tech 2) Identify main customer issues 3) Train AI model with interaction data","opts":["3 → 1 → 2","2 → 3 → 1","1 → 2 → 3","2 → 1 → 3"],"ans":[1]},{"m":1,"q":"Which healthcare technology trend provides near real-time replicas of lifelong data records for individuals?","opts":["Digital Twins","Robots in Healthcare","AI and Machine Learning","3D Printing"],"ans":[0]},{"m":1,"q":"A company wants AI to personalize website content based on browsing history. What's the most important technical requirement?","opts":["Increased customer service staff","High-quality website design","Low operational cost","AI model for content recommendation"],"ans":[3]},{"m":1,"q":"What historical event paved the way for skyscrapers and mass-produced goods like cars?","opts":["The Renaissance","The French Revolution","The Industrial Revolution","The Enlightenment"],"ans":[2]},{"m":1,"q":"An AI assistant analyzes user's personal data across platforms for recommendations. What's the most significant ethical concern?","opts":["Transparency of AI decision-making","Impact on human jobs","User privacy and data protection","Potential bias in algorithms"],"ans":[2]},{"m":1,"q":"A company uses Gemini AI to analyze sensitive customer data for marketing. What's the most pressing concern?","opts":["Customer privacy and data protection","NLP capabilities","Integration with cloud infrastructure","Competition from other AI platforms"],"ans":[0]},{"m":1,"q":"An AI medical imaging system misdiagnoses a patient. What's the most critical ethical consideration?","opts":["Job displacement of radiologists","Algorithm accuracy and reliability","Transparency and accountability of AI decisions","Patient privacy and data security"],"ans":[2]},{"m":1,"q":"What distinguishes Deep Learning (DL) from AI and ML?","opts":["DL involves algorithms learning from data without explicit programming","DL focuses on achieving AI through algorithms and data training","DL mimics brain functions with layered neural networks for pattern recognition","DL encompasses tasks like language understanding and problem-solving"],"ans":[2]},{"m":1,"q":"Match AI tools to healthcare use cases: A) Neural Network B) Decision Trees C) NLP with 1) Predicting outcomes 2) Detecting tumors in images 3) Interpreting doctor's notes","opts":["1-A, 2-C, 3-B","1-B, 2-A, 3-C","1-B, 2-C, 3-A","1-C, 2-B, 3-A"],"ans":[0]},{"m":1,"q":"Which coding language is widely used in Machine Learning?","opts":["Java","Python","C++","C"],"ans":[1]},{"m":1,"q":"What analogy does Tomaso Poggio use to describe the periodicity of ideas like neural networks?","opts":["Waves in the ocean","Epidemics of viruses","Cycles of the moon","Growth of plants"],"ans":[0]},{"m":1,"q":"Order the ML model development steps: 1) Model Evaluation 2) Data Preprocessing 3) Model Training","opts":["2 > 3 > 1","2 > 1 > 3","1 > 3 > 2","3 > 2 > 1"],"ans":[0]},{"m":1,"q":"Order the neural network training process: 1) Activation Function Application 2) Backpropagation 3) Forward Propagation","opts":["2 > 1 > 3","2 > 3 > 1","1 > 3 > 2","3 > 2 > 1"],"ans":[3]},{"m":1,"q":"How can AI improve a recommendation system?","opts":["Use collaborative filtering","Use decision trees","Use clustering","Use linear regression"],"ans":[0]},{"m":1,"q":"Which AI method helps predict future sales based on past data?","opts":["Clustering","Data visualization","Regression analysis","Decision trees"],"ans":[2]},{"m":1,"q":"A manufacturing company uses AI to optimize production schedules. Which area does AI improve?","opts":["Worker safety","Production efficiency","Product quality","Facility size"],"ans":[1]},{"m":1,"q":"A retail company uses AI to predict demand and manage inventory. Which area will AI improve?","opts":["Stock levels","Warehouse construction","Customer feedback","Employee training"],"ans":[0]},{"m":1,"q":"Match ML concept with description: 1. Supervised Learning 2. Unsupervised Learning 3. Reinforcement Learning with A) Learns patterns/structures B) Uses labeled data C) Learns via trial-and-error","opts":["1-B, 2-A, 3-C","1-C, 2-A, 3-B","1-C, 2-B, 3-A","1-A, 2-C, 3-B"],"ans":[0]},{"m":1,"q":"Which type of AI exhibits specific facets of human intelligence (e.g., recognizing images) but lacks other capabilities?","opts":["Narrow AI","General AI","Deep Learning","Machine Learning"],"ans":[0]},{"m":1,"q":"A healthcare startup wants ethical, unbiased AI for diagnosis. What's crucial?","opts":["Minimizing human intervention","Optimizing storage efficiency","Implementing diverse datasets","Enhancing computational speed"],"ans":[2]},{"m":1,"q":"Order training a deep learning model: 1) Evaluation of Model performance 2) Backpropagation to Update Weights 3) Initialization of Model Parameters","opts":["2 > 3 > 1","1 > 3 > 2","3 > 2 > 1","2 > 1 > 3"],"ans":[2]},{"m":1,"q":"Which technology makes Deep Learning possible by mimicking the brain's biological structure?","opts":["Clustering","Artificial Neural Networks (ANNs)","Reinforcement Learning","Decision Tree Learning"],"ans":[1]},{"m":1,"q":"A healthcare provider wants AI diagnostic tools. Which ethical consideration is most critical?","opts":["Algorithm accuracy and reliability","Regulatory compliance and legal implications","Patient privacy and data security","Staff training and adoption challenges"],"ans":[0]},{"m":1,"q":"What's the relationship between AI, ML, and DL?","opts":["AI encompasses ML and DL with DL a subset of ML","AI encompasses ML and DL with ML a subset of DL","DL is a subset of ML which is a subset of AI","AI is a subset of ML which is a subset of DL"],"ans":[2]},{"m":1,"q":"Order how ChatGPT processes a query: 1) Interpret query/intent 2) Retrieve relevant info 3) Generate response","opts":["3 > 2 > 1","2 > 1 > 3","1 > 3 > 2","2 > 3 > 1"],"ans":[2]},{"m":1,"q":"What are the adjustable parameters in neurons called?","opts":["Weights and Biases","Input and Hidden layers","Units and Cells","Data and Biases"],"ans":[0]},{"m":1,"q":"Systems that only react without creating memories or using past experiences are called:","opts":["Limited Memory","Reactive Machines","Theory of Mind","Self-awareness"],"ans":[1]},{"m":1,"q":"Deep learning uses multiple layers of neural networks to process unstructured data, unlike Machine Learning which relies on structured data.","opts":["True","False"],"ans":[0]},{"m":1,"q":"Just like the PC, Internet, and Cloud Computing, AI is also a disruptive technology.","opts":["True","False"],"ans":[0]},{"m":1,"q":"Naïve Bayes Classifier algorithm is useful for predicting the class of the test dataset.","opts":["True","False"],"ans":[0]},{"m":1,"q":"Unsupervised Machine Learning algorithms are used when training data is neither classified nor labelled.","opts":["True","False"],"ans":[0]},{"m":1,"q":"Which type of Machine Learning algorithm is used by Stock Market Analysis?","opts":["Unsupervised Learning","Supervised Learning","Reinforcement Learning","Semi-supervised Learning"],"ans":[1]},{"m":1,"q":"Which algorithm interacts with its environment by producing actions and discovering errors/rewards?","opts":["Supervised Learning","Semi-Supervised Learning","Reinforcement Learning"],"ans":[2]},{"m":1,"q":"What is differential privacy?","opts":["A method to collect personal data","A way to protect our privacy","A technique for making AI secure","A method for making AI systems private"],"ans":[1]},{"m":1,"q":"AI has the potential to amplify and scale human biases at an unprecedented rate.","opts":["True","False"],"ans":[0]},{"m":1,"q":"What is one benefit of having a strong AI code of ethics?","opts":["It guarantees profit for companies that implement AI","It ensures a secure and humane approach to AI","It eliminates the need for government regulations","It increases the speed of AI developments"],"ans":[1]},{"m":1,"q":"Which is a challenge in establishing AI ethics?","opts":["The lack of data for AI development","The absence of a wide-scale governing body","High costs of implementing AI technologies","The rapid advancement of AI tools"],"ans":[1]},{"m":1,"q":"How can AI-powered recommendation systems affect consumer behavior? (Select all)","opts":["They have no influence on consumers","They can influence consumer preferences","They limit consumer exposure","They can manipulate perceptions about brands"],"ans":[1,2,3],"multi":true},{"m":1,"q":"Which is NOT a risk associated with Deepfakes?","opts":["Increased attacks on celebrities and politicians","Creation and dissemination of misleading information","Creation of fake accounts or hacking legitimate accounts","Creation of a hyper-personalized customer experience"],"ans":[3]},{"m":1,"q":"What are potential benefits of an Explainability Mechanism in Image Generators? (Select all)","opts":["Eliminates copyright issues with AI-generated images","Helps allocate credit to AI artwork","Helps assess context and logic applied","Prevents cloning"],"ans":[0,1,2],"multi":true},{"m":1,"q":"Which are under consideration for the Generative AI copyright debate? (Select all)","opts":["AI Owner","AI Programmer","AI Reviewer","AI Administrator"],"ans":[0,1,3],"multi":true},{"m":1,"q":"In India, ethical use of AI is detailed in a draft of:","opts":["National Artificial Intelligence Bureau","National Artificial Intelligence Strategy","National Artificial Intelligence Plan","National Artificial Intelligence Federation"],"ans":[1]},{"m":1,"q":"Generative AI can have significant environmental impact due to:","opts":["CO2 Emission","NO2 Emission","Computer Waste","Heat Generation"],"ans":[0]},{"m":2,"q":"Reactive machines use past experiences to determine future actions.","opts":["True","False"],"ans":[1]},{"m":2,"q":"Self-driving cars usually use Limited Memory technology to:","opts":["Store data","Automate","Detect Motion"],"ans":[0]},{"m":2,"q":"Which of these is NOT an application of AI?","opts":["Language Translation","Voice Recognition","Robotics","Obtain massive training data sets"],"ans":[3]},{"m":2,"q":"Which are examples of Weak AI?","opts":["Siri, Alexa & Advanced Chess Programs","Siri & Alexa","Advanced Chess Programs"],"ans":[0]},{"m":2,"q":"Predictive maintenance, an application of AI, prevents unplanned downtime.","opts":["True","False"],"ans":[0]},{"m":2,"q":"What is the name of the AI firm that introduced ChatGPT?","opts":["OpenAI","Nuro","Stem"],"ans":[0]},{"m":2,"q":"ChatGPT is a type of NLP model known as a generative pre-trained Transformer.","opts":["True","False"],"ans":[0]},{"m":2,"q":"Which is a drawback of ChatGPT? (Select all)","opts":["AI chatbot occasionally displays biased content encouraging negative behavior","AI chatbot provides biased responses by overusing certain words/phrases","AI chatbot analyzes user input and shares answers within seconds"],"ans":[0,1],"multi":true},{"m":2,"q":"ChatGPT gives customers tailored responses more likely to lead to:","opts":["Personalized experience","Sales Support","Lead generation"],"ans":[0]},{"m":2,"q":"ChatGPT is trained to understand human inputs using the RLHF model.","opts":["True","False"],"ans":[0]},{"m":2,"q":"An e-commerce platform integrates ChatGPT chatbots. What's a primary benefit?","opts":["Enhancing website security","Optimizing supply chain logistics","Reducing customer wait times","Automating inventory management"],"ans":[2]},{"m":2,"q":"An ML company's recommendation system reports inaccurate suggestions. Potential cause?","opts":["Insufficient training data","Overfitting of the model","Low computational power","Inappropriate algorithm choice"],"ans":[0]},{"m":2,"q":"A retail company integrates ChatGPT chatbots for support and sales. Most advantageous capability?","opts":["Personalizing shopping experiences","Generating creative content","Providing medical information","Automating administrative tasks"],"ans":[0]},{"m":2,"q":"A tech startup enhances product recommendations using AI/neural networks. Most suitable application?","opts":["Enhance customer engagement","Optimize manufacturing processes","Secure financial transaction","Streamline project management"],"ans":[0]},{"m":2,"q":"How can Small Businesses use ChatGPT? (Select all)","opts":["Automating customer support","Personalizing customer interactions","Pitching for investment rounds","Streamlining employee communications","Conducting market research"],"ans":[0,1,3,4],"multi":true},{"m":2,"q":"How does ChatGPT help with SEO? (Select all)","opts":["Generates relevant keywords based on a prompt/topic","Relevant meta descriptions improve click-through rate","Can generate links to improve search ranking","Can explain terminology/processes by generating definitions"],"ans":[0,1,2],"multi":true},{"m":2,"q":"Marketers can use ChatGPT to find past successful campaigns that resonate with an unrestricted audience.","opts":["True","False"],"ans":[1]},{"m":2,"q":"How does ChatGPT help with Content Creation? (Select all)","opts":["Producing headlines","Initiating social media posts","Self-recording campaign videos","Creating video scripts"],"ans":[0,1,3],"multi":true},{"m":2,"q":"ChatGPT can analyze customer data and offer tailored recommendations for specific preferences.","opts":["True","False"],"ans":[0]},{"m":2,"q":"AI Text Classifier flags potentially AI-generated text but shouldn't be used as a definitive measure.","opts":["True","False"],"ans":[0]},{"m":2,"q":"The AI Text Classifier could stop the spread/misuse of: (Select all)","opts":["Automated spread of incorrect information","Plagiarism","Chatbots pretending to be human","Text written by humans"],"ans":[0,1,2],"multi":true},{"m":2,"q":"AI Text Classifier from OpenAI is a ____ detector.","opts":["GPT-2 and OpenAI","GPT-3 and ChatGPT","GPT and OpenAI Tool"],"ans":[1]},{"m":2,"q":"What are applications of AI Text Classifier? (Select all)","opts":["Dataset classification","Spam Classifier","Sentiment Classifier","Hate Speech Detection","Profile Flagging"],"ans":[1,2,3,4],"multi":true},{"m":2,"q":"What are limitations of OpenAI's AI Text Classifier? (Select all)","opts":["Accurately identifies human vs AI content","Less effective in other languages, unreliable in code","Cannot detect AI text tweaked to fool a classifier"],"ans":[1,2],"multi":true},{"m":2,"q":"What is the purpose of using Blender in OpenAI's Point-E?","opts":["To create a collection of 3D models","To cluster 3D models based on CLIP properties","To transform point clouds into meshes","To develop a novel point cloud diffusion approach"],"ans":[2]},{"m":2,"q":"What two AI models are used in Point-E and their function?","opts":["Text-to-speech and image-to-video for rendered objects","Text-to-image and image-to-3D for creating Point Clouds","Text-to-3D and image-to-point cloud for Meshes","Text-to-object and image-to-Mesh for 3D objects"],"ans":[1]},{"m":2,"q":"What's a potential benefit of Point-E for the entertainment industry?","opts":["Reducing cost of high-end 2D animation","Generating real-world images for 3D rendering","Creating detailed but slower, expensive 3D models","Producing high-quality 3D representations like meshes or NeRFs"],"ans":[3]},{"m":2,"q":"What long-run application does the OpenAI team see for Point-E's point clouds system?","opts":["Production of virtual objects for gaming and animation","Creation of 2D animations for marketing","Design of 3D printers for real objects","Enhancement of image quality for photography"],"ans":[0]},{"m":2,"q":"What's the purpose of Point-E's image-to-3D model?","opts":["To generate images without 3D objects","To generate 3D objects without images","To understand associations between words and images","To generate efficient understanding of 3D objects combined with images"],"ans":[3]},{"m":2,"q":"What is DALL-E?","opts":["A chatbot developed by OpenAI","A language model for NLP","A generative AI model creating images from text prompts","A dataset of pictures with text captions"],"ans":[2]},{"m":2,"q":"What language model is used to build DALL-E?","opts":["Generative Pre-trained Transformer","ChatGPT","Diffusion Model","Pixilated Image Model"],"ans":[0]},{"m":2,"q":"What's the main difference between DALL-E 1 and DALL-E 2?","opts":["DALL-E 1 renders only cartoonish images, DALL-E 2 realistic ones","DALL-E 2 is faster at generating images","DALL-E 1 generates one image, DALL-E 2 produces variations","DALL-E 2 is better at editing/retouching images"],"ans":[2]},{"m":2,"q":"What's one way DALL-E can be utilized in business?","opts":["Generating website traffic","Creating social media campaigns","Producing website layouts","Generating customer reviews"],"ans":[2]},{"m":2,"q":"How does DALL-E work?","opts":["Generates images based on natural language descriptions","Analyzes user behavior to predict preferences","Uses ML to generate images from scratch","Scans internet for images and compiles new designs"],"ans":[0]},{"m":2,"q":"Which tool allows users to turn photos into art pieces?","opts":["DeepArt.io","StyleGAN","Adobe Sensei","GauGAN"],"ans":[0]},{"m":3,"q":"What can wearable fitness tech do besides step counting? (Select all)","opts":["Monitoring heart rhythm","Detecting vitamin deficiency","Detecting atrial fibrillation","Monitoring blood glucose levels"],"ans":[0,2],"multi":true},{"m":3,"q":"Wearable tech can: (Select all)","opts":["Give indications about health","Provide entertainment","Provide easy email communication","Help with social connectivity"],"ans":[0,1,3],"multi":true},{"m":3,"q":"Wearable AI tech uses NLP and computer vision to convert visual cues into voice cues for visually impaired people.","opts":["True","False"],"ans":[0]},{"m":3,"q":"Which AI-powered wearable calculates cardiovascular age and capacity for heart health insights?","opts":["Apple Watch","Ultrahuman Ring","Fitbit","Oura Ring"],"ans":[1]},{"m":3,"q":"How are nerve endings of 'phantom limb syndrome' used in bionics?","opts":["A mechanical device with electrodes controlled via computers","An e-sensor device electrically stimulates peripheral nerves of the amputated part","Nerve endings are cauterized and prosthetics connected","Microprocessors embedded in prosthetic arm guided externally"],"ans":[1]},{"m":3,"q":"Which is NOT an intelligent wearable?","opts":["Smart hearing aids","Vision performance glasses","Smart thermostat","Pet tracking collars"],"ans":[2]},{"m":3,"q":"Which sensor is used by AI to prevent accidents caused by other parties?","opts":["Lidar","Mass Airflow","NOx"],"ans":[0]},{"m":3,"q":"Which is a cause of concern for EV users? (Select all)","opts":["Range Anxiety","Charging Time","Advanced Driving Systems Assistance"],"ans":[0,1],"multi":true},{"m":3,"q":"EVs can be upgraded using smart charging technologies.","opts":["True","False"],"ans":[0]},{"m":3,"q":"In EV manufacturing, ____ helps minimize downtime and keep operations smooth.","opts":["Predictive maintenance","Defect detection","Visual inspection system","Root cause analysis"],"ans":[0]},{"m":3,"q":"For upkeep and monitoring of EV batteries, AI is particularly crucial.","opts":["True","False"],"ans":[0]},{"m":3,"q":"Users interact with the Metaverse's virtual space as Digital Avatars.","opts":["True","False"],"ans":[0]},{"m":3,"q":"What makes the Metaverse always-on and massively scalable?","opts":["Inclusive User Interfaces","Artificial Intelligence Operations (AIOps)","Enhanced Smart Contracts","Metaverse Support"],"ans":[1]},{"m":3,"q":"Emotional Recognition is possible for customisation within the Metaverse's virtual world.","opts":["True","False"],"ans":[0]},{"m":3,"q":"Metaverse helps manage ____.","opts":["Augmented Reality","Virtual Reality","Crypto Portfolio","Artificial Intelligence"],"ans":[1]},{"m":3,"q":"Antidemocratic activities in the Metaverse can be identified using ____.","opts":["Enhanced Smart Contracts","Intelligent Networking","AIOps","NVIDIA Omniverse"],"ans":[2]},{"m":3,"q":"How can corporations tap into AI-powered workforce growth? (Select all)","opts":["Encouraging experimentation and curiosity with Gen AI","Starting with small pilot projects to gain familiarity","Creating passionate, knowledgeable Gen AI enthusiasts","Allowing individuals to achieve goals leveraging legacy skills"],"ans":[0,1,2],"multi":true},{"m":3,"q":"AI is not able to magnify possibilities for human-complementary tech change, and developing tools for better decision-making is challenging.","opts":["True","False"],"ans":[1]},{"m":3,"q":"Which is NOT true?","opts":["AI in workplace increases skillsets but not remuneration","Chatbots are used by HR to support training activities","Automation/AI may eliminate positions but also create jobs","AI growth creates opportunities in AR/IoT"],"ans":[0]},{"m":3,"q":"For a career in AI, it's critical to understand the business domain requirements that AI can solve.","opts":["True","False"],"ans":[0]},{"m":3,"q":"Through ____ companies can analyze customer preferences/behaviors to deliver tailored recommendations.","opts":["AI-driven algorithms","Predictive analytics","Automation techniques","Data analysis and insights"],"ans":[0]},{"m":3,"q":"AI has the power to reduce busywork and enable workers to focus on more strategic tasks.","opts":["True","False"],"ans":[0]},{"m":3,"q":"What role does AI play in city planning? (Select all)","opts":["Urban infrastructure management","Smart and sustainable city planning","Traffic management and urban monitoring","Population management"],"ans":[0,1,2],"multi":true},{"m":3,"q":"AI tools enable designers to rapidly explore new concepts and refine designs before production.","opts":["True","False"],"ans":[0]},{"m":3,"q":"All current AI solutions belong to the ____ class.","opts":["Artificial Intelligence Primer","Artificial Network","Artificial Model Foundation","Artificial Narrow Intelligence"],"ans":[3]},{"m":4,"q":"Which statement is NOT true about Edge AI?","opts":["Edge AI achieves near real-time analytics","Edge often operates in an open network, making information theft easier","Edge AI model works on edge device without constant outside connection","Edge AI brings cost reductions via scalability and reduced latency"],"ans":[1]},{"m":4,"q":"Predictive Maintenance is one of the most common use cases for TinyML.","opts":["True","False"],"ans":[0]},{"m":4,"q":"Which statements are true about TinyML? (Select all)","opts":["TinyML makes AI ubiquitous and accessible to consumers","Cloud AI doesn't suffer from edge latency","TinyML needs edge/cloud/internet connectivity to function","TinyML is the most efficient, cost-effective way to infuse AI into IoT devices"],"ans":[0,3],"multi":true},{"m":4,"q":"Edge AI enables performing ML tasks on a ____ device.","opts":["Cloud-enabled","Local","Internet-connected","Battery-operated"],"ans":[1]},{"m":4,"q":"Benefits of using TinyML include: (Select all)","opts":["Low power consumption","High latency","More expensive","Data privacy","Low bandwidth"],"ans":[0,3,4],"multi":true},{"m":4,"q":"Which is True about Quantum Computers?","opts":["Quantum Computing deals with many options to compute information","It is based on quantum physics which makes it slower","Quantum Computers study atoms and particles","Quantum Computers use much more energy than traditional computers"],"ans":[0]},{"m":4,"q":"Quantum Computers use quantum bits (qubits) that represent '1' and '0' at once in superposition and work in entangled groups.","opts":["True","False"],"ans":[0]},{"m":4,"q":"Which company found that entangling qubits reduced error rate by half in a data-classification experiment?","opts":["JPMorgan Chase","IBM","Microsoft","Rigetti Computing"],"ans":[0]},{"m":4,"q":"In which areas is Quantum Computing applied? (Select all)","opts":["Pricing optimization and fraud detection","Drug discovery and battery chemistry","Plant biology and farming techniques","Pedagogy and cognitive learning"],"ans":[0,1],"multi":true},{"m":4,"q":"In which domain can Quantum Computing NOT be used?","opts":["Complex manufacturing","Drug discovery","Financial services","Classical computing"],"ans":[3]},{"m":4,"q":"An educational institution needs to securely manage sensitive student data across campuses. What should they prioritize?","opts":["Cloud computing security solutions","Quantum computing","Blockchain technology","Machine learning algorithms"],"ans":[0]},{"m":5,"q":"What are core components of Phase 1.0 of Big Data evolution?","opts":["Database management and Data warehousing","Semi-structured and Unstructured Data","Sensor-based and Internet-enabled devices"],"ans":[0]},{"m":5,"q":"What does Big Data Analytics majorly help with in the natural assets industry?","opts":["Improving customer relationships","Preventing production downtimes","Analyzing geographical, text, and temporal data","Predicting customer demand"],"ans":[2]},{"m":5,"q":"____ is a serverless, cost-effective enterprise data warehouse that operates across clouds and scales with data.","opts":["BigQuery","Azure","IBM Cloud","Teradata"],"ans":[0]},{"m":5,"q":"Generative AI revolutionizes data analysis by generating synthetic datasets and automating content creation.","opts":["True","False"],"ans":[0]},{"m":5,"q":"Which Big Data trend helps maintain control over data usage while allowing multiple stakeholder access?","opts":["Dark Data","Data Lake","Data Governance","Data as Service"],"ans":[2]},{"m":5,"q":"Traditional structured data is now complemented by unstructured/semi-structured formats that can't fit a fixed schema.","opts":["True","False"],"ans":[0]},{"m":5,"q":"A centralized repository that stores all structured, unstructured, and semi-structured data at any scale is called a:","opts":["Dataset","Database","Data Lake","Data Warehouse"],"ans":[2]},{"m":5,"q":"Data visualization shows statistical/numerical data visually to communicate their ____.","opts":["meanings","decisions","conclusions","reference"],"ans":[0]},{"m":5,"q":"What are benefits of analyzing Big Data? (Select all)","opts":["Improves future prospects over current problem","Helps in innovation and product development","Enhances customer experience","Enables faster, efficient decision making"],"ans":[1,2,3],"multi":true},{"m":5,"q":"Which analytics type describes/summarizes existing data to understand what happened?","opts":["Descriptive Analytics","Diagnostic Analytics","Predictive Analytics","Prescriptive Analytics"],"ans":[0]},{"m":5,"q":"Big Data Analytics examines large datasets to discover unknown patterns, correlations, and trends for data-driven decisions.","opts":["True","False"],"ans":[0]},{"m":5,"q":"Which analytics type predicts the path for future course of action?","opts":["Predictive Analytics","Prescriptive Analytics","Diagnostic Analytics"],"ans":[1]},{"m":5,"q":"Customer Segmentation and Differential Pricing Strategy can be easily achieved through Big Data Analytics.","opts":["True","False"],"ans":[0]},{"m":5,"q":"Which data analysis approach fails to cope with the advent of huge structured/unstructured Big Data?","opts":["Traditional","New","Low"],"ans":[0]},{"m":5,"q":"Healthcare big data refers to collecting/analyzing patient/clinical data too vast for traditional processing.","opts":["True","False"],"ans":[0]},{"m":5,"q":"Which is NOT a key component of DBMS?","opts":["Runtime Database Manager","Equitable Manager","Database Manager"],"ans":[1]},{"m":5,"q":"RDBMSes store data as tables, with most commercial systems using:","opts":["SQL","Apache","WorkFusion"],"ans":[0]},{"m":5,"q":"The table format in RDBMSes is easy to understand but doesn't provide an organized structure to match entries via queries.","opts":["True","False"],"ans":[1]},{"m":5,"q":"Which is an open-source RDBMS with a client-server model?","opts":["Oracle","MySQL","MS-Access"],"ans":[1]},{"m":5,"q":"MongoDB supports ad-hoc queries and document-based queries.","opts":["True","False"],"ans":[0]},{"m":6,"q":"The Energy sector leverages IoT devices in ____.","opts":["Wireless grid communication","Smart wearables","Robotics","Engine management"],"ans":[0]},{"m":6,"q":"Which is the first stage in every IoT architecture?","opts":["Sensors and Actuators","Internet Gateways and Data Acquisition Systems","Edge IT","Data Center and Cloud"],"ans":[0]},{"m":6,"q":"IoT devices are naturally vulnerable to ____ threats.","opts":["Sensors","Heterogeneity","Security","Connectivity"],"ans":[2]},{"m":6,"q":"IoT is a paradigm that involves ubiquitous presence in the environment.","opts":["True","False"],"ans":[0]},{"m":6,"q":"Which IoT solutions are used in the Banking sector? (Select all)","opts":["Smart ATMs","Wearable devices","Mobile point-of-sale systems","Bank credit or debit cards"],"ans":[0,1,2],"multi":true},{"m":6,"q":"You're hosting a party and guests arrive. The smart security camera will:","opts":["Detect # of people, report to AI Control Center, and auto turn on lights","Wait for instructions from the owner to turn on lights"],"ans":[0]},{"m":6,"q":"The latest tech advances have tremendous potential to:","opts":["Impact the jobs of people","Benefit people by increasing efficiency and reducing waste"],"ans":[1]},{"m":6,"q":"IoT can analyze mall traffic so stores can adjust to enhance shopping experience while reducing overhead.","opts":["True","False"],"ans":[0]},{"m":6,"q":"The IoT is a network of internet-linked devices that can collect/share data without human interaction.","opts":["True","False"],"ans":[0]},{"m":6,"q":"Which challenges do connected cars face? (Select all)","opts":["Data security","Network connectivity","Predictive maintenance","Operating system issues"],"ans":[0,1,3],"multi":true},{"m":6,"q":"Which IIoT elements tackle manufacturing challenges? A) Sensors monitoring production flow B) Predictive models from IoT data","opts":["Only A","Only B","Both A and B"],"ans":[2]},{"m":6,"q":"Which are the biggest users of IIoT?","opts":["Automotive Fleet Management & Manufacturing","Manufacturing & Media/Entertainment","Automotive Fleet Management & Media/Entertainment"],"ans":[0]},{"m":6,"q":"As IoT devices collect vast user data, the potential for hacking/breaches increases.","opts":["True","False"],"ans":[0]},{"m":6,"q":"What challenges do businesses face integrating IoT into manufacturing? (Select all)","opts":["Data overload and analytics","Interoperability hurdles","Increased human interventions","Cost of implementing devices"],"ans":[0,1,3],"multi":true},{"m":6,"q":"What are the top benefits of IIoT in manufacturing?","opts":["Operational performance & Safety/compliance","Operational performance, Safety/compliance & Flexibility/agility","Safety/compliance & Flexibility/agility"],"ans":[1]},{"m":6,"q":"Which is NOT an example of digital payment?","opts":["Debit card","Mobile wallet","Cheque","SWIFT","UPI"],"ans":[2]},{"m":6,"q":"Which statement is NOT true about digital payments?","opts":["UPI payment can be made directly from bank account without card/bank details","Common PoS allows payment after PIN entry","A prepaid bank card is linked to bank account, usable numerous times","Paytm, Freecharge, Mobikwik are mobile wallets"],"ans":[2]},{"m":6,"q":"Which step in a digital payment transaction involves encryption of payment information?","opts":["Initiation","Authentication","Authorization","Completion"],"ans":[1]},{"m":6,"q":"Which digital payments app opened its own RBI-registered bank?","opts":["Paytm","PhonePe","GPay","Amazon Pay"],"ans":[0]},{"m":6,"q":"Digital payments significantly impact financial inclusion, small businesses, customer convenience, and economic growth.","opts":["True","False"],"ans":[0]},{"m":7,"q":"Which is NOT one of the big names in FinTech cloud computing?","opts":["Amazon Web Services","Microsoft Silverlight","Google Virtual Cloud","Microsoft Azure"],"ans":[1]},{"m":7,"q":"The resilience of Cloud deployments:","opts":["Increases Uptime","Simplifies Disaster Recovery","Both of the above"],"ans":[2]},{"m":7,"q":"An example of PaaS is:","opts":["Rackspace Cloud","Mosso","Amazon EC2","GMail"],"ans":[1]},{"m":7,"q":"Which cloud service model is most widely used in the world?","opts":["SaaS","PaaS","IaaS","All of them"],"ans":[0]},{"m":7,"q":"Amazon Elastic MapReduce offers a ____ framework to process large amounts of data.","opts":["R","Hadoop","Python","None of the above"],"ans":[1]},{"m":7,"q":"Cloud Computing's ability to store tremendous amounts of data also helps:","opts":["Big Data Analytics","Action Items","Cloud Networks"],"ans":[0]},{"m":7,"q":"Disaster Recovery is one of the major benefits of Cloud Computing.","opts":["True","False"],"ans":[0]},{"m":7,"q":"Cloud Computing in e-commerce refers to hosting/delivering information via a network of servers.","opts":["True","False"],"ans":[0]},{"m":7,"q":"Cloud Computing architecture also depends on:","opts":["Information, Technology, and Application","Information, Bandwidth, and Application","Type, Security, and Application"],"ans":[0]},{"m":7,"q":"Computing is believed to facilitate greater collaboration and enhance learning opportunities.","opts":["True","False"],"ans":[0]},{"m":7,"q":"SaaS is also known as hosted software or on-demand software.","opts":["True","False"],"ans":[0]},{"m":7,"q":"The PaaS model allows renting virtualized servers/services to run, design, develop, test, deploy, and host applications.","opts":["True","False"],"ans":[0]},{"m":7,"q":"Grunge Computing is about moving local computing to local devices in a distributed system around a cloud core.","opts":["True","False"],"ans":[1]},{"m":7,"q":"iPaaS offerings letting users implement data mapping/transformations come from:","opts":["Apache Spark","Dell Boomi","WorkFusion"],"ans":[1]},{"m":7,"q":"Infrastructure as a Service and Hardware as a Service are two completely different things.","opts":["True","False"],"ans":[1]},{"m":7,"q":"Which Cloud Service is a user-friendly, no-code platform for creating business applications?","opts":["Ninox","Amazon Aurora","IBM DB2"],"ans":[0]},{"m":7,"q":"Which cloud programming language is known for reusability and a modular approach making coding easy?","opts":["Python","Java","Ruby"],"ans":[1]},{"m":7,"q":"Which Cloud-based IDE is web-based offering a full-stack browser environment to code anywhere?","opts":["Codeanywhere","Eclipse Orion","Codenvy"],"ans":[2]},{"m":7,"q":"Which Cloud Monitoring tool manages all aspects of Private, Public, and Hybrid cloud?","opts":["CA Unified Infrastructure Management","Microsoft Cloud Monitoring","Amazon Cloud Watch"],"ans":[0]},{"m":7,"q":"Which is the second phase of a typical Cloud Migration Framework?","opts":["IT Infrastructure Discovery and Assessment","Operate and Optimize","Legacy IT to Cloud Operations Migration"],"ans":[2]},{"m":8,"q":"____ uses software/hardware methods to tackle external threats arising during application development.","opts":["Disaster Recovery","Application Security","Information Security","Endpoint Security"],"ans":[1]},{"m":8,"q":"Critical Infrastructure does not include:","opts":["Electricity Grid","Water Purification","Traffic Lights","Cooking Gas Lines"],"ans":[3]},{"m":8,"q":"The full form of SEG is:","opts":["Secure Email Gateway","Secure Ecommerce Gateway","Security Email Gateway","Secure Email Gate"],"ans":[0]},{"m":8,"q":"Application security uses software and hardware methods to tackle external threats.","opts":["True","False"],"ans":[0]},{"m":8,"q":"Who, alongside the FDA, launched a joint initiative on medical device threats?","opts":["HHS","DHS","LHS","AHS"],"ans":[1]},{"m":8,"q":"Prioritizing simple security strategies is the best way to defeat evolving security threats.","opts":["True","False"],"ans":[1]},{"m":8,"q":"The easiest way for attackers to gain network access is to:","opts":["Leverage existing vulnerabilities","Create new vulnerabilities","Send spam mails"],"ans":[0]},{"m":8,"q":"A cybersecurity framework can be any document defining procedures/goals to guide detailed policies.","opts":["True","False"],"ans":[0]},{"m":8,"q":"Which is the recommended security standard for electronic payment processing?","opts":["COBIT","HIPAA rules","PCI DSS"],"ans":[2]},{"m":8,"q":"It's impractical to use multiple cybersecurity solutions to address different infrastructure threats.","opts":["True","False"],"ans":[1]},{"m":8,"q":"Hackers are always looking for opportunities to invade privacy and steal crucial data.","opts":["True","False"],"ans":[0]},{"m":8,"q":"A cyber attack is an offensive action targeting information systems/networks/devices to steal, alter, or destroy data.","opts":["True","False"],"ans":[0]},{"m":8,"q":"One of the easiest ways your information can be hacked is through easy-to-guess passwords.","opts":["True","False"],"ans":[0]},{"m":8,"q":"Which attack uses IP spoofing and ICMP to saturate a target network with traffic?","opts":["Smurf attack","Teardrop attack","Replay attack"],"ans":[0]},{"m":8,"q":"Botnets are systems infected with malware under hacker control used to carry out DDoS attacks.","opts":["True","False"],"ans":[0]},{"m":8,"q":"Which are true for Data Privacy? (Select all)","opts":["A branch of Data Security dealing with handling of data","Consent, Data Collection, and Regulatory Compliance are main entities","Data Security concentrates on keeping data safe from attacks","GDPR, HIPAA, GLBA, CCPA protect data shared with third parties"],"ans":[0,1,3],"multi":true},{"m":8,"q":"What are benefits of Data Control? (Select all)","opts":["Data flaws identified before causing issues","Root cause of issues identified and remediated","Data is monitored and controlled","Sensitive data can be mishandled"],"ans":[0,1,2],"multi":true},{"m":8,"q":"What are types of Data Security control? (Select all)","opts":["Data Encryption","Data Masking","Data Corruption","Data Resilience","Data Erasure"],"ans":[0,1,3,4],"multi":true},{"m":8,"q":"Automating processes helps reduce data silos and the risk of human error.","opts":["True","False"],"ans":[0]},{"m":8,"q":"What steps ensure compliance with Data Privacy regulations? (Select all)","opts":["Implement a compliance strategy focused on Data Privacy","Hire Subject Matter Experts on compliance","Call authorities in case of a Data Breach","Maintain an inventory of personal information"],"ans":[0,1,3],"multi":true},{"m":8,"q":"Which are the five types of Deepfakes? (Select all)","opts":["Textual Deepfakes","Deepfake Videos","Deepfake Coding","Deepfake Images","Deepfake Audio","Live Deepfake"],"ans":[0,1,3,4,5],"multi":true},{"m":8,"q":"How can businesses protect against Deepfakes? (Select all)","opts":["Verifying authenticity with the original source","Superimposing images/videos to assess dissimilarities","Detecting Deepfakes using technology against itself","Accelerating Digital Transformation and Education"],"ans":[0,2,3],"multi":true},{"m":8,"q":"Deepfakes are manipulated content powered by Machine Learning, produced as text, audio, images, videos, or real-time streams.","opts":["True","False"],"ans":[0]},{"m":8,"q":"According to Steinberg, which are the three Deepfake threat categories? (Select all)","opts":["Disinformation campaigns mostly involving edits to legitimate content","Subtle changes to images/logos/content to bypass detection tools","Synthetic/composite Deepfakes derived from a collection of originals","Replicas of legitimate email addresses with slight variation"],"ans":[0,1,2],"multi":true},{"m":8,"q":"What cybercrime is described as potentially more financially damaging due to deepfakes?","opts":["Ransomware attacks","DDoS attacks","Business Email Compromise (BEC) scams","Man-in-the-middle attacks"],"ans":[2]},{"m":9,"q":"In Blockchain, a change to a recorded block isn't rewritten; instead it's stored in a new block.","opts":["True","False"],"ans":[0]},{"m":9,"q":"How did Blockchain impact Walmart Canada's supply chain management?","opts":["Increased disputed invoices to 90%","Reduced disputed invoices from 70% to 1%","Eliminated all manual work in payables","Doubled the time for carrier payments"],"ans":[1]},{"m":9,"q":"What major trend is associated with Blockchain technology adoption?","opts":["Mass adoption of centralization","Mass adoption of decentralization","Decreased security","Increased regulation"],"ans":[1]},{"m":9,"q":"Which Blockchain trend enables users to build their own digital products?","opts":["Blockchain as a Product","Blockchain as a Service","Blockchain with AI","Blockchain with IoT"],"ans":[1]},{"m":9,"q":"Federated Blockchain is a type of Private Blockchain.","opts":["True","False"],"ans":[0]},{"m":9,"q":"What's a key characteristic of Blockchain technology?","opts":["High transaction fees","Centralized control","Decentralization","Limited access"],"ans":[2]},{"m":9,"q":"What does 'digital ledger' refer to in Blockchain?","opts":["A type of cryptocurrency","A shared record of transactions","A physical notebook","A banking system"],"ans":[1]},{"m":9,"q":"While using Blockchain, fragmented internal systems are centralized, allowing interoperability.","opts":["True","False"],"ans":[0]},{"m":9,"q":"Cryptocurrency is the technology that serves as the Distributed Ledger forming the Network.","opts":["True","False"],"ans":[1]},{"m":9,"q":"Bitcoin allows anyone to send money across borders almost instantly with very low fees.","opts":["True","False"],"ans":[0]},{"m":9,"q":"What are benefits of Blockchain in financial transactions?","opts":["Faster + Error-Free Transactions","Error-Free + Centralized Verification","Faster Transactions + Centralized Verification"],"ans":[0]},{"m":9,"q":"Which factor makes blockchain disruptive for banking?","opts":["The fact that it is fast","The fact it reduces interactions with intermediaries","The fact that it is secure"],"ans":[1]},{"m":9,"q":"How can Blockchain enhance Central Bank Digital Currencies (CBDCs)?","opts":["By reducing financial access for individuals","By compromising user security and privacy","By providing transparency to track transactions","By increasing the need for physical currency"],"ans":[2]},{"m":9,"q":"In financial services, Blockchain technology is used for:","opts":["Automation","Digital Connection","Digital Instruments"],"ans":[2]},{"m":9,"q":"Blockchain can improve data quality for banks by ensuring data doesn't exist in duplicate locations.","opts":["True","False"],"ans":[0]},{"m":9,"q":"How can Blockchain create an efficient workplace? (Select all)","opts":["Helps recruiters verify employment history quickly","Links employee accounts with company accounts","Easier/faster payments of salaries","Helps employers outsource tasks"],"ans":[0,2,3],"multi":true},{"m":9,"q":"Blockchain makes data private/secure using cryptographic techniques and Merkle trees, restricting access to permissioned users.","opts":["True","False"],"ans":[0]},{"m":9,"q":"Controlling career credentials via blockchain benefits which job search processes? (Select all)","opts":["Employment creation","Job match","Job advertisements","Relevant hiring organisations","Proof of career history for immigrants"],"ans":[1,3,4],"multi":true},{"m":9,"q":"On blockchain, private data is immutably recorded and employees lose control since records can't be deleted.","opts":["True","False"],"ans":[1]},{"m":9,"q":"Which is NOT true about Blockchain's impact on the workforce?","opts":["Salaries/bonuses more transparent on open blockchain","Workplaces can track outsourced work with verified records","All employers/universities will adopt blockchain, simplifying resume verification","Blockchain can help refugees/immigrants find jobs matching skillsets"],"ans":[2]},{"m":9,"q":"Blue Prism is a RPA tool used widely in the industry.","opts":["True","False"],"ans":[0]},{"m":9,"q":"What are benefits of RPA tools? (Select all)","opts":["Helps automate large numbers of processes","Helps increase scalability","Helps in connecting different devices"],"ans":[0,1],"multi":true},{"m":9,"q":"A well-controlled, scalable RPA platform needs a partnership between:","opts":["HR and IT","Operation and IT","Support and IT"],"ans":[1]},{"m":9,"q":"One RPA process can work with only one application.","opts":["True","False"],"ans":[1]},{"m":9,"q":"What two things are necessary for executing a complete RPA solution?","opts":["Operation Studio and HBO","Process Studio and VBO","Automation Studio and RBO"],"ans":[1]},{"m":9,"q":"Core Technologies of RPA include: (Select all)","opts":["Artificial Intelligence","Machine Learning","Workflow Automation","Screen Scraping","NLP"],"ans":[0,2,3],"multi":true},{"m":9,"q":"RPA tools' UI layer integration ensures layout/screen resolution changes don't affect the application.","opts":["True","False"],"ans":[1]},{"m":9,"q":"Screen Scraping is useful for application interfaces that are ____ through available UI frameworks/code.","opts":["accessible","not accessible","readable","not formattable"],"ans":[1]},{"m":9,"q":"Which statement is NOT true about Workflow Automation?","opts":["Automates manual processes based on pre-defined rules","Automates external/internal workflows customized & personalized","Increases accuracy of consumer data handling","Difficult to track/respond to follow-ups due to automated responses"],"ans":[3]},{"m":9,"q":"Which AI capabilities help drive RPA's business value? (Select all)","opts":["NLP","Computer vision","Chatbots","OCR"],"ans":[0,1,3],"multi":true},{"m":9,"q":"In the Insurance Industry, workers spend more than half their time:","opts":["Collecting and processing data","Arranging offline paper data","Printing reports"],"ans":[0]},{"m":9,"q":"Using RPA bots, which function can NOT be automated?","opts":["Data entry into key systems","Meeting customers one-to-one","Downloading policyholder data from multiple sources","Reading and scanning data"],"ans":[1]},{"m":9,"q":"RPA implementation should never involve orchestrating robots; they can work without supervision.","opts":["True","False"],"ans":[1]},{"m":9,"q":"Which is a huge field of RPA application in regulatory compliance for Insurance/Banking?","opts":["Only Process workflows","Only Control costs","Both Process workflows and Control costs"],"ans":[2]},{"m":9,"q":"RPA is inducing what in traditional Insurance systems undergoing transformation?","opts":["Slow Speed to action","Multi Channel Integration","Heavy Cost of Implementation"],"ans":[1]},{"m":10,"q":"Which is NOT among the 5Ds of Digital Marketing?","opts":["Digital Platform","Digital Systems","Digital Data","Digital Devices","Digital Media"],"ans":[1]},{"m":10,"q":"What is the importance of data in Digital Marketing? (Select all)","opts":["Helps determine searched keywords to target and drive traffic","Helps prevent cyber attacks in your organization","Past data can predict future campaign outcomes","Tracks visitor types to build personas for new customers"],"ans":[0,2,3],"multi":true},{"m":10,"q":"A multi-touch attribution model makes data-driven budget decisions ensuring highest possible ROI.","opts":["True","False"],"ans":[0]},{"m":10,"q":"What are benefits of using Digital Platforms in Digital Marketing? (Select all)","opts":["Increased sales","Increased downtime","Improved customer targeting","Improved brand awareness"],"ans":[0,2,3],"multi":true},{"m":10,"q":"Which Digital Media can be used in Digital Marketing? (Select all)","opts":["TV & Radio","Mobile Apps","Podcasts","Newspapers","Emails"],"ans":[0,1,2,4],"multi":true},{"m":10,"q":"Digital Storytelling can cover explaining a concept, reflecting personal experience, or making an argument.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Digital Storytelling in online education has only been adapted for student engagement.","opts":["True","False"],"ans":[1]},{"m":10,"q":"What are steps to create a Digital Story? (Select all)","opts":["Write an original script","Create storyboards","Research, explore, and learn","Create a user persona"],"ans":[0,1,2],"multi":true},{"m":10,"q":"Which statement is NOT true about storyboarding?","opts":["A visual blueprint of how a video will look/feel","A good step to gauge if students are on track in a longer project","Since it visualizes the final look, it's very elaborate and detail-oriented"],"ans":[2]},{"m":10,"q":"Benefits of Digital Storytelling are: (Select all)","opts":["Improved understanding, writing, technical, presentation skills","Improved emotional intelligence of students","Improved overall academic performance","Improved research skills"],"ans":[0,2,3],"multi":true},{"m":10,"q":"Which is the first stage involved in 3D Printing?","opts":["Additive Manufacturing","Strategy","Printing"],"ans":[0]},{"m":10,"q":"3D Printing creates 3-dimensional objects designed on a computer.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Which process is widely recognized as the first 3D Printing process?","opts":["Stereolithography (SL)","Digital Light Process","Inkjet"],"ans":[0]},{"m":10,"q":"Which 3D Printing process builds parts layer by layer using standard copier paper?","opts":["Selective Deposition Lamination","Extrusion","Stereolithography"],"ans":[0]},{"m":10,"q":"3D Printing creates parts by building up objects one layer at a time.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Digital Manufacturing connects systems/processes across production for an integrated approach spanning design, production, and service.","opts":["True","False"],"ans":[0]},{"m":10,"q":"What are key elements of Digital Manufacturing?","opts":["Connected Design/Production, Smart Factory, Value Chain","Digital Twins, Smart Factory, Value Chain","Connected Design/Production, Manufacturing Software, Value Chain"],"ans":[0]},{"m":10,"q":"What are business units adopting 3D Printing in an organization called?","opts":["Digital manufacturers","Digital factories","Digital manufactory"],"ans":[1]},{"m":10,"q":"What are the three pillars of a Digital Factory? (Select all)","opts":["Digital Factory for Metals","Digital Factory for Plastics","Digital Factory for Cotton","The Digital Foundry"],"ans":[0,1,3],"multi":true},{"m":10,"q":"Name three 3D Digital Manufacturing technologies for small manufacturers: (Select all)","opts":["CNC Milling","Sheet Lamination","Fused Filament Fabrication","Inkjet 3D and binder jetting printing"],"ans":[0,2,3],"multi":true},{"m":10,"q":"Which is an upcoming trend in 3D Printing?","opts":["Polymer 3D Printing will dominate","Hardware advances will amplify 3D Printing","Automation will become a key focus"],"ans":[2]},{"m":10,"q":"What is predicted to be the next frontier for the future of 3D Printing?","opts":["Design validation, prototyping, jigs, fixtures","Mass production, functional end-use applications","Product design with extensive tooling"],"ans":[1]},{"m":10,"q":"3D Printing technology could dramatically change Supply Chains through cost reduction, speed, and innovation.","opts":["True","False"],"ans":[0]},{"m":10,"q":"What should be the first step in delivering 3D Printing's impact in Manufacturing?","opts":["Accepting new ways of designing parts","Implementing advanced technology","Focusing more on Rapid Prototyping"],"ans":[0]},{"m":10,"q":"Personalized Healthcare is one of the most significant growth areas for 3D Printing in medicine.","opts":["True","False"],"ans":[0]},{"m":10,"q":"The parking assistant feature in a car is an example of Augmented Reality.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Which is a key element of the Virtual Reality experience?","opts":["Overlaying 3D images","Immersion","Simulation"],"ans":[1]},{"m":10,"q":"Snapchat face filters could be termed primitive forms of Augmented Reality.","opts":["True","False"],"ans":[0]},{"m":10,"q":"What's most appropriate regarding AR and VR technologies?","opts":["The fun quotient differentiates them from other tech","AR/VR directly affects perceptions and processes of the human mind","The element of interactivity makes them different"],"ans":[1]},{"m":10,"q":"What's the name of the first VR headset invented by Ivan Sutherland?","opts":["Solomon's Golden Table","The Sword of Damocles","The Shroud of Turin"],"ans":[1]},{"m":10,"q":"What combines to make a Metaverse? (Select all)","opts":["Social Media","Online Gaming","Augmented Reality","Virtual Reality","Digital Currencies"],"ans":[0,1,2,3],"multi":true},{"m":10,"q":"Metaverse is large-scale, multifunctional, and not limited only to VR/AR experiences.","opts":["True","False"],"ans":[0]},{"m":10,"q":"When purchasing a digital item in the Metaverse, you must secure rights to use it only on separate individual platforms.","opts":["True","False"],"ans":[1]},{"m":10,"q":"Which statements hold true for Metaverse? (Select all)","opts":["A convergence of physical, augmented, and virtual reality","The future of the Internet","Its origin is from the sci-fi movie TRON","A metaphor for breaking down physical/economic barriers"],"ans":[0,1,3],"multi":true},{"m":10,"q":"Which Indian start-ups are working on Metaverse? (Select all)","opts":["Bolly Heroes","One Rare","Facebook","Microsoft","LOKA"],"ans":[0,1,4],"multi":true},{"m":10,"q":"How can Virtual Reality be utilized in Banking? (Select all)","opts":["Payments by scanning cards with phone camera","Guided tour of property-buying steps","Details about nearest ATMs/branches","3D virtual tour of bank branch"],"ans":[1,3],"multi":true},{"m":10,"q":"Which application is NOT possible with VR/AR in financial industry?","opts":["Data visualisation","Virtual trading","Human interaction","Virtual Reality payments","Customer acquisition"],"ans":[2]},{"m":10,"q":"With AR, you can see more info about a product and interact with a holographic salesperson.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Biometric security in an AR system connected with VR enables secure access to banking processes.","opts":["True","False"],"ans":[0]},{"m":10,"q":"In VR, the relationship between an object's properties and a user's ability to act on it is based on:","opts":["Allowances","Affordances","Spatial Awareness"],"ans":[1]},{"m":10,"q":"Curved display of non-VR text/images in a VR environment will not look smooth and badly affects immersion.","opts":["True","False"],"ans":[1]},{"m":10,"q":"In a 360° VR video, the best way to make users look left without breaking immersion is to:","opts":["Pan the camera automatically to the speaker","Avoid and create an alternative interaction","Add audio cues, like the character speaking"],"ans":[2]},{"m":10,"q":"What type of audio is most commonly used in VR?","opts":["Monoscopic","Stereoscopic","Both Monoscopic and Stereoscopic"],"ans":[2]},{"m":10,"q":"____ merges real and virtual worlds where physical/digital objects interact in real time, requiring wearable hardware.","opts":["Virtual Reality","Augmented Reality","Mixed Reality","Mirrored Reality"],"ans":[2]},{"m":10,"q":"Which tool is best for creating and presenting AI-generated reports professionally?","opts":["PowerPoint","Excel","Microsoft Word","Gemini"],"ans":[0]},{"m":10,"q":"Which chart best represents proportions of a whole, like a pie chart image?","opts":["Line chart","Scatter plot","Pie chart","Doughnut chart"],"ans":[2]},{"m":10,"q":"Which neural network architecture processes data in one direction without loops?","opts":["Recurrent Neural Network (RNN)","Reinforcement Learning Model","Feedforward Neural Network","Convolutional Neural Network (CNN)"],"ans":[2]},{"m":10,"q":"What technological advancement contributed significantly to the resurgence of neural networks?","opts":["Support vector machines (SVMs)","Quantum computing","Analog computing","Graphics processing units (GPUs)"],"ans":[3]},{"m":10,"q":"To visualize sales growth trend over the last 12 months, which chart is best?","opts":["Line chart","Bar chart","Pie chart","Heat map"],"ans":[0]},{"m":10,"q":"Match tools with uses: 1. MS Word 2. Google Sheets 3. PowerPoint with A) Visual presentations B) Organizing/analyzing data C) Writing/formatting text","opts":["1-B, 2-C, 3-A","1-C, 2-B, 3-A","1-A, 2-C, 3-B","1-B, 2-A, 3-C"],"ans":[1]},{"m":10,"q":"For hospital visits across diseases over a year, which visualization is most suitable?","opts":["Pie chart","Line chart","Bar chart","Heat map"],"ans":[2]},{"m":10,"q":"Which tool is used for creating business process models and organizational charts?","opts":["Xbox","MS Word","Notepad","Microsoft Visio"],"ans":[3]},{"m":10,"q":"A VR developer must understand textures, scripts, objects, components, and other Unity basics.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Which are animation tools? (Select all)","opts":["Blender","Maya","Pixlr","3ds Max"],"ans":[0,1,3],"multi":true},{"m":10,"q":"Which statement holds true for Virtual Reality?","opts":["It is computationally intensive","It requires less computation"],"ans":[0]},{"m":10,"q":"What are essential skills for an AR/VR Developer? (Select all)","opts":["Software Development","Knowledge of Deep Learning","UX Design & Animation","Graphics Rendering","Good sketching skills"],"ans":[0,2,3],"multi":true},{"m":10,"q":"Which language helps create AR/VR experiences with animations, physics, and sound effects?","opts":["Rust","UnityScript","JavaScript","C++"],"ans":[1]},{"m":10,"q":"How did OpenAI evaluate GPT-4's efficiency and performance?","opts":["By giving pre-recorded directions to self-driving cars","By simulating exams designed for humans like LSAT","By providing reference images to a custom website"],"ans":[1]},{"m":10,"q":"GPT-4 has more data and can solve complex problems, while GPT-3 has more computing power.","opts":["True","False"],"ans":[1]},{"m":10,"q":"OpenAI claims GPT-4 has a high degree of ____, making it harder for the AI to break character.","opts":["Steerability","Summarization","Tokenization"],"ans":[0]},{"m":10,"q":"GPT-4 was developed to improve model 'alignment' — following user intentions while being more truthful and less harmful.","opts":["True","False"],"ans":[0]},{"m":10,"q":"Which features give GPT-4 an edge over GPT-3? (Select all)","opts":["Better text completion","Precise translation","Summarization","Unimodality"],"ans":[0,1,2],"multi":true},{"m":10,"q":"CNNs learn to recognize patterns in images by extracting features using convolutional and pooling layers.","opts":["True","False"],"ans":[0]},{"m":10,"q":"What are the three elements of Artificial Neural Networks (ANN)? (Select all)","opts":["Feedback ANN","Processing Elements","Topology","Learning Algorithm"],"ans":[1,2,3],"multi":true},{"m":10,"q":"What does a CNN require configured before training the model?","opts":["Hyperparameters","Precise localization","High-level interface","Segmentation"],"ans":[0]},{"m":10,"q":"In Neural Networks, information transfers to the next layer using:","opts":["Lengths and biases","Weights and biases","Input and output layer"],"ans":[1]},{"m":10,"q":"The ____ determines the error in the prediction and reports it back to the Neural Network.","opts":["Cost function","Activation function","Bias parameters","Weighted sum"],"ans":[0]}]
+
+</script>
+<script>
+(function(){
+  const ALL_Q = JSON.parse(document.getElementById('question-data').textContent);
+  const MODULE_NAMES = {
+    1:"AI & Responsible AI", 2:"AI Applications & Tools", 3:"Wearables, EVs & Metaverse",
+    4:"Edge AI & Quantum", 5:"Big Data & DBMS", 6:"Internet of Things",
+    7:"Cloud Computing", 8:"Cybersecurity & Data Protection", 9:"Blockchain & RPA",
+    10:"Digital Marketing, 3D Printing, AR/VR"
+  };
+  const LETTERS = ['A','B','C','D','E','F'];
+
+  let selectedModules = new Set(Object.keys(MODULE_NAMES).map(Number));
+  let mode = 'exam';
+  let quizQuestions = [];
+  let userAnswers = {};   // index -> array of selected option indices
+  let flagged = new Set();
+  let currentIdx = 0;
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  // ---------- SETUP SCREEN ----------
+  const moduleGrid = document.getElementById('moduleGrid');
+  function renderModuleGrid(){
+    moduleGrid.innerHTML = '';
+    Object.keys(MODULE_NAMES).forEach(mKey=>{
+      const m = Number(mKey);
+      const count = ALL_Q.filter(q=>q.m===m).length;
+      const chip = document.createElement('div');
+      chip.className = 'module-chip' + (selectedModules.has(m) ? ' active' : '');
+      chip.innerHTML = `<span>M${m} · ${MODULE_NAMES[m]}</span><span class="cnt">${count}</span>`;
+      chip.addEventListener('click', ()=>{
+        if(selectedModules.has(m)){ selectedModules.delete(m); } else { selectedModules.add(m); }
+        renderModuleGrid();
+        updateSelectedCount();
+      });
+      moduleGrid.appendChild(chip);
+    });
+  }
+  function availableCount(){
+    return ALL_Q.filter(q=>selectedModules.has(q.m)).length;
+  }
+  function updateSelectedCount(){
+    const avail = availableCount();
+    document.getElementById('selectedCount').textContent = avail;
+    const input = document.getElementById('qCountInput');
+    input.max = avail;
+    if(Number(input.value) > avail) input.value = avail;
+  }
+  renderModuleGrid();
+  updateSelectedCount();
+
+  document.getElementById('modeExam').addEventListener('click', ()=>{
+    mode='exam';
+    document.getElementById('modeExam').classList.add('selected');
+    document.getElementById('modePractice').classList.remove('selected');
+  });
+  document.getElementById('modePractice').addEventListener('click', ()=>{
+    mode='practice';
+    document.getElementById('modePractice').classList.add('selected');
+    document.getElementById('modeExam').classList.remove('selected');
+  });
+
+  document.getElementById('startBtn').addEventListener('click', ()=>{
+    if(selectedModules.size===0){ alert('Pick at least one module.'); return; }
+    const avail = availableCount();
+    let n = parseInt(document.getElementById('qCountInput').value, 10);
+    if(isNaN(n) || n < 1) n = avail;
+    n = Math.min(n, avail);
+    const pool = ALL_Q.filter(q=>selectedModules.has(q.m));
+    quizQuestions = shuffle(pool).slice(0, n);
+    userAnswers = {};
+    flagged = new Set();
+    currentIdx = 0;
+    document.getElementById('qTotal').textContent = quizQuestions.length;
+    showScreen('quiz');
+    renderQuestion();
+  });
+
+  // ---------- QUIZ SCREEN ----------
+  function renderQuestion(){
+    const q = quizQuestions[currentIdx];
+    document.getElementById('qPos').textContent = currentIdx+1;
+    document.getElementById('progressFill').style.width = ((currentIdx+1)/quizQuestions.length*100)+'%';
+    document.getElementById('moduleTag').textContent = 'MODULE ' + q.m + ' · ' + MODULE_NAMES[q.m];
+    document.getElementById('qText').textContent = q.q;
+    document.getElementById('multiHint').style.display = q.multi ? 'block' : 'none';
+
+    const flagBtn = document.getElementById('flagBtn');
+    flagBtn.classList.toggle('flagged', flagged.has(currentIdx));
+
+    const list = document.getElementById('optionsList');
+    list.innerHTML = '';
+    const picked = userAnswers[currentIdx] || [];
+    q.opts.forEach((opt, i)=>{
+      const row = document.createElement('div');
+      row.className = 'option' + (picked.includes(i) ? ' picked' : '');
+      row.innerHTML = `<div class="letter">${LETTERS[i]}</div><div class="otext">${escapeHtml(opt)}</div>`;
+      row.addEventListener('click', ()=> selectOption(i));
+      list.appendChild(row);
+    });
+
+    document.getElementById('practiceFeedback').style.display = 'none';
+    document.getElementById('practiceFeedback').innerHTML = '';
+
+    document.getElementById('prevBtn').disabled = currentIdx===0;
+    document.getElementById('nextBtn').textContent = currentIdx===quizQuestions.length-1 ? 'Finish →' : 'Next →';
+
+    if(mode==='practice' && picked.length>0){
+      showPracticeFeedback();
+    }
+  }
+
+  function selectOption(i){
+    const q = quizQuestions[currentIdx];
+    let picked = userAnswers[currentIdx] || [];
+    if(q.multi){
+      if(picked.includes(i)) picked = picked.filter(x=>x!==i);
+      else picked = picked.concat([i]);
+    } else {
+      picked = [i];
+    }
+    userAnswers[currentIdx] = picked;
+    renderQuestion();
+    if(mode==='practice') showPracticeFeedback();
+  }
+
+  function showPracticeFeedback(){
+    const q = quizQuestions[currentIdx];
+    const picked = (userAnswers[currentIdx]||[]).slice().sort();
+    const correct = q.ans.slice().sort();
+    const isCorrect = JSON.stringify(picked)===JSON.stringify(correct);
+    const box = document.getElementById('practiceFeedback');
+    box.style.display = 'block';
+    const correctText = q.ans.map(i=>LETTERS[i]+') '+q.opts[i]).join('; ');
+    box.innerHTML = `<div style="padding:14px;border-radius:var(--radius);background:${isCorrect?'var(--success-light)':'var(--danger-light)'};border:1px solid ${isCorrect?'var(--success)':'var(--danger)'};font-size:13.5px;">
+      <b style="color:${isCorrect?'var(--success)':'var(--danger)'}">${isCorrect?'Correct':'Not quite'}</b><br>
+      Correct answer: ${escapeHtml(correctText)}
+    </div>`;
+    // visually mark options
+    document.querySelectorAll('#optionsList .option').forEach((el,i)=>{
+      if(correct.includes(i)) el.style.borderColor = 'var(--success)';
+      else if(picked.includes(i)) el.style.borderColor = 'var(--danger)';
+    });
+  }
+
+  document.getElementById('flagBtn').addEventListener('click', ()=>{
+    if(flagged.has(currentIdx)) flagged.delete(currentIdx);
+    else flagged.add(currentIdx);
+    document.getElementById('flagBtn').classList.toggle('flagged', flagged.has(currentIdx));
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', ()=>{
+    if(currentIdx>0){ currentIdx--; renderQuestion(); window.scrollTo(0,0); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    if(currentIdx < quizQuestions.length-1){
+      currentIdx++; renderQuestion(); window.scrollTo(0,0);
+    } else {
+      finishQuiz();
+    }
+  });
+
+  // ---------- RESULTS SCREEN ----------
+  let lastReviewData = [];
+  function finishQuiz(){
+    let correctCount = 0;
+    const moduleStats = {};
+    const review = [];
+    quizQuestions.forEach((q, idx)=>{
+      const picked = (userAnswers[idx]||[]).slice().sort();
+      const correct = q.ans.slice().sort();
+      const isCorrect = picked.length>0 && JSON.stringify(picked)===JSON.stringify(correct);
+      const skipped = picked.length===0;
+      if(isCorrect) correctCount++;
+      if(!moduleStats[q.m]) moduleStats[q.m] = {correct:0,total:0};
+      moduleStats[q.m].total++;
+      if(isCorrect) moduleStats[q.m].correct++;
+      review.push({idx, q, picked, correct, isCorrect, skipped, flagged: flagged.has(idx)});
+    });
+    lastReviewData = review;
+
+    showScreen('results');
+    const pct = Math.round(correctCount/quizQuestions.length*100);
+    document.getElementById('scoreBig').innerHTML = correctCount + '<span>/' + quizQuestions.length + '</span>';
+    document.getElementById('scoreLabel').textContent = pct + '% correct';
+    const band = document.getElementById('gradeBand');
+    if(pct>=85){ band.textContent='Strong grasp'; band.style.background='var(--success-light)'; band.style.color='var(--success)'; }
+    else if(pct>=60){ band.textContent='Solid, some gaps'; band.style.background='var(--warn-light)'; band.style.color='var(--warn)'; }
+    else { band.textContent='Needs more review'; band.style.background='var(--danger-light)'; band.style.color='var(--danger)'; }
+
+    const breakdown = document.getElementById('moduleBreakdown');
+    breakdown.innerHTML = '';
+    Object.keys(moduleStats).map(Number).sort((a,b)=>a-b).forEach(m=>{
+      const s = moduleStats[m];
+      const p = Math.round(s.correct/s.total*100);
+      const color = p>=70?'var(--success)': p>=40?'var(--warn)':'var(--danger)';
+      const row = document.createElement('div');
+      row.className = 'breakdown-row';
+      row.innerHTML = `<div class="bm">M${m} ${MODULE_NAMES[m]}</div>
+        <div class="breakdown-bar"><div class="breakdown-fill" style="width:${p}%;background:${color}"></div></div>
+        <div class="bn">${s.correct}/${s.total}</div>`;
+      breakdown.appendChild(row);
+    });
+
+    renderReviewList('all');
+  }
+
+  function renderReviewList(filter){
+    const list = document.getElementById('reviewList');
+    list.innerHTML = '';
+    let data = lastReviewData;
+    if(filter==='wrong') data = data.filter(r=>!r.isCorrect && !r.skipped);
+    if(filter==='skipped') data = data.filter(r=>r.skipped);
+    if(filter==='flagged') data = data.filter(r=>r.flagged);
+    if(data.length===0){
+      list.innerHTML = '<p style="color:var(--muted);font-size:13px;">Nothing here.</p>';
+      return;
+    }
+    data.forEach(r=>{
+      const cls = r.skipped ? 'skipped' : (r.isCorrect ? 'correct' : 'wrong');
+      const div = document.createElement('div');
+      div.className = 'review-item ' + cls;
+      const yourText = r.picked.length ? r.picked.map(i=>LETTERS[i]+') '+r.q.opts[i]).join('; ') : '— not answered —';
+      const correctText = r.correct.map(i=>LETTERS[i]+') '+r.q.opts[i]).join('; ');
+      div.innerHTML = `
+        <div class="ri-q">M${r.q.m} · ${escapeHtml(r.q.q)}</div>
+        ${!r.isCorrect ? `<div class="ri-line your">Your answer: ${escapeHtml(yourText)}</div>` : ''}
+        <div class="ri-line correct-line">Correct: ${escapeHtml(correctText)}</div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      renderReviewList(chip.dataset.filter);
+    });
+  });
+
+  document.getElementById('retryBtn').addEventListener('click', ()=>{
+    showScreen('setup');
+  });
+  document.getElementById('retryWrongBtn').addEventListener('click', ()=>{
+    const wrongQs = lastReviewData.filter(r=>!r.isCorrect).map(r=>r.q);
+    if(wrongQs.length===0){ alert('No wrong answers to retry — nice work!'); return; }
+    quizQuestions = wrongQs;
+    userAnswers = {};
+    flagged = new Set();
+    currentIdx = 0;
+    document.getElementById('qTotal').textContent = quizQuestions.length;
+    showScreen('quiz');
+    renderQuestion();
+  });
+
+  // ---------- UTIL ----------
+  function showScreen(name){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-'+name).classList.add('active');
+    document.getElementById('headerPill').textContent =
+      name==='setup' ? 'MOCK TEST' : name==='quiz' ? 'IN PROGRESS' : 'RESULTS';
+    window.scrollTo(0,0);
+  }
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+})();
+
+</script>
+</body>
+</html>
