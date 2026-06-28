@@ -477,7 +477,7 @@
     document.getElementById('prevBtn').disabled = currentIdx===0;
     document.getElementById('nextBtn').textContent = currentIdx===quizQuestions.length-1 ? 'Finish →' : 'Next →';
 
-    if(mode==='practice' && picked.length>0){
+    if(mode==='practice' && picked.length>0 && (!q.multi || picked.length === q.ans.length)){
       showPracticeFeedback();
     }
   }
@@ -493,7 +493,9 @@
     }
     userAnswers[currentIdx] = picked;
     renderQuestion();
-    if(mode==='practice') showPracticeFeedback();
+    if(mode==='practice' && (!q.multi || picked.length === q.ans.length)) {
+      showPracticeFeedback();
+    }
   }
 
   function showPracticeFeedback(){
